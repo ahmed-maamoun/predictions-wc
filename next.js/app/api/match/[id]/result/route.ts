@@ -3,6 +3,7 @@ import dbConnect from '@/utils/db';
 import Match from '@/models/Match';
 import Prediction from '@/models/Prediction';
 import Person from '@/models/Person';
+import mongoose from 'mongoose';
 
 function calculatePoints(predictedA: number, predictedB: number, actualA: number, actualB: number): number {
   if (isCorrectWinner(predictedA, predictedB, actualA, actualB)) {
@@ -15,7 +16,7 @@ function calculatePoints(predictedA: number, predictedB: number, actualA: number
 
 function calculateWinnerPoints(totalPredictors: number, correctWinnerCount: number): number {
   if (totalPredictors === 0 || correctWinnerCount === 0) return 0;
-  const points = totalPredictors / correctWinnerCount;
+  const points = totalPredictors/ correctWinnerCount;
   return Math.round(points * 4) / 4;
 }
 
@@ -27,9 +28,9 @@ function isCorrectWinner(predictedA: number, predictedB: number, actualA: number
   );
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, context: { params: { id: string } }) {
   await dbConnect();
-  const matchId = params.id;
+  const matchId = await context.params.id;
   const { ScoreA, ScoreB } = await req.json();
   // Update match result
   const match = await Match.findByIdAndUpdate(matchId, { resultHomeScore: ScoreA, resultAwayScore: ScoreB }, { new: true });
@@ -43,12 +44,13 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     if (isCorrectWinner(prediction.homeScore, prediction.awayScore, ScoreA, ScoreB)) {
       points += calculateWinnerPoints(totalPredictors, correctWinnerCount);
     }
-    prediction.predictionPoints = points;
+    prediction.predictionPoints = mongoose.Types.Decimal128.fromString(points.toString());
     await prediction.save();
     // Update person points
     const person = await Person.findById(prediction.person);
     if (person) {
-      person.points = (person.points || 0) + points;
+      const currentPoints = person.points ? parseFloat(person.points.toString()) : 0;
+      person.points = mongoose.Types.Decimal128.fromString((currentPoints + points).toString());
       await person.save();
     }
   }

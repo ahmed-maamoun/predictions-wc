@@ -5,7 +5,11 @@ import Person from '@/models/Person';
 export async function GET() {
   await dbConnect();
   const persons = await Person.find().exec();
-  return NextResponse.json(persons);
+  const personsJson = persons.map(p => ({
+    ...p.toObject(),
+    points: p.points ? parseFloat(p.points.toString()) : 0
+  }));
+  return NextResponse.json(personsJson);
 }
 
 export async function POST(req: NextRequest) {
@@ -13,7 +17,11 @@ export async function POST(req: NextRequest) {
   const data = await req.json();
   const person = new Person(data);
   await person.save();
-  return NextResponse.json(person, { status: 201 });
+  const personJson = {
+    ...person.toObject(),
+    points: person.points ? parseFloat(person.points.toString()) : 0
+  };
+  return NextResponse.json(personJson, { status: 201 });
 }
 
 // Add PUT, DELETE as needed for full CRUD 

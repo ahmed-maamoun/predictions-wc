@@ -9,7 +9,18 @@ export async function GET() {
     path: 'predictions',
     model: Prediction,
   }).exec();
-  return NextResponse.json(matches);
+  const predictiions = await Prediction.find()
+          .populate('match')
+          .populate('person')
+          .exec();
+   const matchesJson = await Promise.all(matches.map(async m => {
+    const matchObj = m.toObject();
+    if (matchObj.predictions) {
+      matchObj.predictions = await Prediction.find({ match: matchObj._id });
+    }
+    return matchObj;
+  }));
+  return NextResponse.json(matchesJson);
 }
 
 export async function POST(req: NextRequest) {

@@ -83,7 +83,14 @@ export default {
   },
   methods: {
     async fetchMatches() {
-      this.matches = await fetch('http://localhost:3000/api/match').then(r => r.json());
+      const rawMatches = await fetch('http://localhost:3000/api/match').then(r => r.json());
+      // Normalize fields for frontend
+      this.matches = rawMatches.map(m => ({
+        ...m,
+        teamA: m.homeTeam || m.teamA,
+        teamB: m.awayTeam || m.teamB,
+        predictions: Array.isArray(m.predictions) ? m.predictions : [],
+      }));
     },
     async fetchPersons() {
       this.persons = await fetch('http://localhost:3000/api/person').then(r => r.json());
@@ -97,7 +104,9 @@ export default {
       this.fetchMatches();
     },
     openPredictionModal(match) {
-      this.selectedMatch = match;
+      // Always use the match from the main matches array to ensure predictions are populated
+      const latestMatch = this.matches.find(m => m._id === match._id);
+      this.selectedMatch = latestMatch || match;
       this.showPredictionModal = true;
       this.predictionError = '';
       this.predictionPersonId = '';
@@ -192,8 +201,17 @@ export default {
   },
   computed: {
     availablePredictionPersons() {
-      if (!this.selectedMatch) return [];
-      const predictedIds = (this.selectedMatch.predictions || []).map(p => String(p.person));
+    console.log(this.selectedMatch)
+          debugger; // eslint-disable-line no-debugger
+          if (!this.selectedMatch) return [];
+
+          const predictedIds = (this.selectedMatch.predictions || []).map(p => {
+
+        if (typeof p.person === 'object' && p.person._id) return String(p.person._id);
+        return String(p.person);
+      });
+    console.log("hi",predictedIds)
+
       return this.persons.filter(p => !predictedIds.includes(String(p._id)));
     },
     matchHasStarted() {
