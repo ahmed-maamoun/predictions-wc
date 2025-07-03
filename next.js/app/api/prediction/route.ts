@@ -8,7 +8,6 @@ export async function GET() {
   await dbConnect();
   const predictions = await Prediction.find()
     .populate('match')
-    .populate('person')
     .exec();
   const predictionsJson = predictions.map(p => ({
     ...p.toObject(),
