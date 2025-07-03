@@ -231,98 +231,142 @@ export default {
 
 <style>
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f7f7f7;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #1e7c1e 0%, #3bb143 100%); /* Football pitch green */
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 #app {
-  max-width: 900px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-  padding: 32px 40px 40px 40px;
+  max-width: 950px;
+  margin: 32px auto;
+  background: rgba(255,255,255,0.98);
+  border-radius: 18px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.13);
+  padding: 32px 18px 40px 18px;
+  position: relative;
 }
 h1 {
   text-align: center;
-  color: #2c3e50;
+  color: #1e7c1e;
   margin-bottom: 32px;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+h1:before, h1:after {
+  content: '⚽';
+  font-size: 2.2rem;
+  color: #222;
 }
 form {
   display: flex;
   gap: 12px;
   margin-bottom: 18px;
   flex-wrap: wrap;
+  background: #eafbe0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 1px 6px rgba(30,124,30,0.07);
 }
-input[type="text"], input[type="number"], input[type="date"] {
-  padding: 8px 10px;
-  border: 1px solid #d0d0d0;
-  border-radius: 6px;
+input[type="text"], input[type="number"], input[type="date"], input[type="datetime-local"] {
+  padding: 10px 12px;
+  border: 1.5px solid #b6e2b6;
+  border-radius: 7px;
   font-size: 1rem;
-  background: #fafafa;
+  background: #f6fff6;
   transition: border 0.2s;
+  min-width: 120px;
 }
 input:focus {
-  border: 1.5px solid #007bff;
+  border: 2px solid #1e7c1e;
   outline: none;
 }
 button {
-  background: #007bff;
+  background: linear-gradient(90deg, #1e7c1e 60%, #3bb143 100%);
   color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 8px 18px;
+  border-radius: 7px;
+  padding: 10px 22px;
   font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(30,124,30,0.08);
+  letter-spacing: 1px;
 }
 button:hover {
-  background: #0056b3;
+  background: linear-gradient(90deg, #3bb143 60%, #1e7c1e 100%);
+  box-shadow: 0 4px 16px rgba(30,124,30,0.13);
 }
 ul {
   list-style: none;
   padding: 0;
 }
 li {
-  background: #f2f6fa;
-  margin-bottom: 8px;
-  padding: 10px 14px;
-  border-radius: 6px;
+  background: #fff;
+  margin-bottom: 12px;
+  padding: 16px 18px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 1px 8px rgba(30,124,30,0.07);
+  border-left: 6px solid #1e7c1e;
+  font-size: 1.08rem;
+}
+li .highlight-missing-result {
+  border-left: 6px solid #d9534f;
+  background: #fff0f0;
 }
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 24px;
-  background: #fafcff;
-  border-radius: 8px;
+  background: #f6fff6;
+  border-radius: 10px;
   overflow: hidden;
+  box-shadow: 0 2px 12px rgba(30,124,30,0.07);
 }
 th, td {
-  padding: 10px 12px;
+  padding: 12px 14px;
   text-align: left;
+  font-size: 1.08rem;
 }
 th {
-  background: #e9f0fa;
-  color: #2c3e50;
-  font-weight: 600;
+  background: #1e7c1e;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 tbody tr:nth-child(even) {
-  background: #f4f8fb;
+  background: #eafbe0;
 }
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   #app {
-    padding: 10px;
+    padding: 8px;
   }
   form {
     flex-direction: column;
     gap: 8px;
+    padding: 8px 6px;
   }
   th, td {
-    padding: 7px 6px;
+    padding: 8px 6px;
+    font-size: 0.98rem;
+  }
+  li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 10px 8px;
+  }
+  h1 {
+    font-size: 1.5rem;
   }
 }
 </style>
