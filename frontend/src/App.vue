@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <h1>Prediction Competition</h1>
-    <form @submit.prevent="addPerson" style="margin-bottom: 24px; display: flex; gap: 12px; align-items: center;">
+    <!-- <form @submit.prevent="addPerson" style="margin-bottom: 24px; display: flex; gap: 12px; align-items: center;">
       <input v-model="newPersonName" placeholder="New Person Name" required />
       <input v-model.number="newPersonPoints" type="number" min="0" step="0.01" placeholder="Initial Points" required />
       <button type="submit">Add Person</button>
       <span v-if="personMessage" :style="{ color: personMessageColor, marginLeft: '12px' }">{{ personMessage }}</span>
-    </form>
+    </form> -->
     <MatchList :matches="matches" @add="addMatch" @open-prediction="openPredictionModal" @open-result="openResultModal" @show-predictions="openPredictionsModal" />
     <ModalDialog :show="showPredictionModal" @close="showPredictionModal = false">
       <h3>Add Prediction for {{ selectedMatch?.teamA }} vs {{ selectedMatch?.teamB }}</h3>
