@@ -11,7 +11,6 @@ export async function GET() {
   }).exec();
   const predictiions = await Prediction.find()
           .populate('match')
-          .populate('person')
           .exec();
    const matchesJson = await Promise.all(matches.map(async m => {
     const matchObj = m.toObject();
