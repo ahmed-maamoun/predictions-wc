@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     async fetchMatches() {
-      const rawMatches = await fetch('http://localhost:3000/api/match').then(r => r.json());
+      const rawMatches = await fetch('https://predictions-wc.vercel.app/api/match').then(r => r.json());
       // Normalize fields for frontend
       this.matches = rawMatches.map(m => ({
         ...m,
@@ -93,10 +93,10 @@ export default {
       }));
     },
     async fetchPersons() {
-      this.persons = await fetch('http://localhost:3000/api/person').then(r => r.json());
+      this.persons = await fetch('https://predictions-wc.vercel.app/api/person').then(r => r.json());
     },
     async addMatch(match) {
-      await fetch('http://localhost:3000/api/match', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+      await fetch('https://predictions-wc.vercel.app/api/match', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
         homeTeam: match.teamA,
         awayTeam: match.teamB,
         startTime: match.matchDate
@@ -129,7 +129,7 @@ export default {
         this.predictionError = 'This person already predicted for this match.';
         return;
       }
-      const response = await fetch('http://localhost:3000/api/prediction', {
+      const response = await fetch('https://predictions-wc.vercel.app/api/prediction', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -153,7 +153,7 @@ export default {
       await this.fetchPersons();
     },
     async submitResult(scoreA, scoreB) {
-      await fetch(`http://localhost:3000/api/match/result?id=${this.selectedMatch._id}`,
+      await fetch(`https://predictions-wc.vercel.app/api/match/result?id=${this.selectedMatch._id}`,
         { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ScoreA: scoreA, ScoreB: scoreB }) });
       this.showResultModal = false;
       await this.fetchPersons();
@@ -163,7 +163,7 @@ export default {
     async addPerson() {
       this.personMessage = '';
       try {
-        const response = await fetch('http://localhost:3000/api/person', {
+        const response = await fetch('https://predictions-wc.vercel.app/api/person', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: this.newPersonName, points: this.newPersonPoints || 0 })
@@ -188,7 +188,7 @@ export default {
       this.selectedMatch = match;
       this.showPredictionsModal = true;
       // Fetch all predictions and filter by matchId
-      const allPredictions = await fetch('http://localhost:3000/api/prediction').then(r => r.json());
+      const allPredictions = await fetch('https://predictions-wc.vercel.app/api/prediction').then(r => r.json());
       this.predictionsForMatch = allPredictions.filter(p => p.match._id === match._id);
     },
     getPersonName(person) {
