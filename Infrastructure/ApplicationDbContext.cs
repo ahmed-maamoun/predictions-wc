@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Domain;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace Infrastructure
 {
@@ -17,6 +18,17 @@ namespace Infrastructure
         {
             base.OnModelCreating(modelBuilder);
             // Add any custom configuration here if needed
+        }
+    }
+
+    public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Infrastructure.ApplicationDbContext>
+    {
+        public Infrastructure.ApplicationDbContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<Infrastructure.ApplicationDbContext>();
+            // Use your actual connection string or a placeholder
+            optionsBuilder.UseNpgsql("Host=localhost;Database=PredictorsScores;Username=postgres;Password=yourpassword");
+            return new Infrastructure.ApplicationDbContext(optionsBuilder.Options);
         }
     }
 } 
