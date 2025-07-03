@@ -35,14 +35,24 @@
             <th>{{ selectedMatch?.homeTeam || 'Team A' }}</th>
             <th>{{ selectedMatch?.awayTeam || 'Team B' }}</th>
             <th>Points</th>
+            <th v-if="!matchHasStarted">Edit</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="p in predictionsForMatch" :key="p._id">
             <td>{{ getPersonName(p.person) }}</td>
-            <td>{{ p.homeScore }}</td>
-            <td>{{ p.awayScore }}</td>
+            <td v-if="editPredictionId !== p._id">{{ p.homeScore }}</td>
+            <td v-else><input v-model.number="editHomeScore" type="number" style="width:60px;"></td>
+            <td v-if="editPredictionId !== p._id">{{ p.awayScore }}</td>
+            <td v-else><input v-model.number="editAwayScore" type="number" style="width:60px;"></td>
             <td>{{ p.predictionPoints }}</td>
+            <td v-if="!matchHasStarted">
+              <button v-if="editPredictionId !== p._id" @click="startEditPrediction(p)">Edit Prediction</button>
+              <span v-else>
+                <button @click="saveEditPrediction(p)">Save</button>
+                <button @click="cancelEditPrediction">Cancel</button>
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -78,7 +88,10 @@ export default {
       predictionsForMatch: [],
       predictionPersonId: '',
       predictionScoreA: '',
-      predictionScoreB: ''
+      predictionScoreB: '',
+      editPredictionId: null,
+      editHomeScore: '',
+      editAwayScore: ''
     };
   },
   methods: {
@@ -198,6 +211,33 @@ export default {
       // If person is id, find in persons
       const found = this.persons.find(p => p._id === person || p.id === person);
       return found ? found.name : 'Unknown';
+    },
+    startEditPrediction(prediction) {
+      this.editPredictionId = prediction._id;
+      this.editHomeScore = prediction.homeScore;
+      this.editAwayScore = prediction.awayScore;
+    },
+    cancelEditPrediction() {
+      this.editPredictionId = null;
+      this.editHomeScore = '';
+      this.editAwayScore = '';
+    },
+    async saveEditPrediction(prediction) {
+      // Call backend to update prediction
+      await fetch(`https://predictions-wc.vercel.app/api/prediction`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          _id: prediction._id,
+          homeScore: this.editHomeScore,
+          awayScore: this.editAwayScore
+        })
+      });
+      this.editPredictionId = null;
+      this.editHomeScore = '';
+      this.editAwayScore = '';
+      // Refresh predictions
+      await this.openPredictionsModal(this.selectedMatch);
     }
   },
   computed: {
