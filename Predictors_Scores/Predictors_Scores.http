@@ -1,0 +1,6 @@
+@Predictors_Scores_HostAddress = http://localhost:5170
+
+GET {{Predictors_Scores_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
