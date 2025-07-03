@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/api/')) {
-    const allowedOrigin = 'http://localhost:8080';
+    const allowedOrigin = 'https://predictions-wc-front.vercel.app';
 
     // Handle preflight
     if (request.method === 'OPTIONS') {
