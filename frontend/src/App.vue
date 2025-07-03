@@ -153,7 +153,8 @@ export default {
       await this.fetchPersons();
     },
     async submitResult(scoreA, scoreB) {
-      await fetch(`http://localhost:3000/api/match/${this.selectedMatch._id}/result`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ScoreA: scoreA, ScoreB: scoreB }) });
+      await fetch(`http://localhost:3000/api/match/result?id=${this.selectedMatch._id}`,
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ScoreA: scoreA, ScoreB: scoreB }) });
       this.showResultModal = false;
       await this.fetchPersons();
       await this.fetchMatches();

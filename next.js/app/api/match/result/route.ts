@@ -16,7 +16,7 @@ function calculatePoints(predictedA: number, predictedB: number, actualA: number
 
 function calculateWinnerPoints(totalPredictors: number, correctWinnerCount: number): number {
   if (totalPredictors === 0 || correctWinnerCount === 0) return 0;
-  const points = totalPredictors/ correctWinnerCount;
+  const points = totalPredictors / correctWinnerCount;
   return Math.round(points * 4) / 4;
 }
 
@@ -28,9 +28,11 @@ function isCorrectWinner(predictedA: number, predictedB: number, actualA: number
   );
 }
 
-export async function POST(req: NextRequest, context: { params: { id: string } }) {
+export async function POST(req: NextRequest) {
   await dbConnect();
-  const matchId = await context.params.id;
+  const { searchParams } = new URL(req.url);
+  const matchId = searchParams.get('id');
+  if (!matchId) return NextResponse.json({ error: 'Missing match id' }, { status: 400 });
   const { ScoreA, ScoreB } = await req.json();
   // Update match result
   const match = await Match.findByIdAndUpdate(matchId, { resultHomeScore: ScoreA, resultAwayScore: ScoreB }, { new: true });
