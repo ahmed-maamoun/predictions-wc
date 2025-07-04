@@ -3,12 +3,11 @@
     <h3>Enter Result for {{ match.homeTeam }} vs {{ match.awayTeam }}</h3>
     <form @submit.prevent="submitResult">
       <label :for="'scoreA-' + match._id">{{ match.homeTeam }}</label>
-      <input :id="'scoreA-' + match._id" v-model.number="scoreA" type="number" :placeholder="match.homeTeam || 'Score A'" required :disabled="hasStarted" />
+      <input :id="'scoreA-' + match._id" v-model.number="scoreA" type="number" :placeholder="match.homeTeam || 'Score A'" required />
       <label :for="'scoreB-' + match._id">{{ match.awayTeam }}</label>
-      <input :id="'scoreB-' + match._id" v-model.number="scoreB" type="number" :placeholder="match.awayTeam || 'Score B'" required :disabled="hasStarted" />
-      <button type="submit" :disabled="hasStarted">Submit Result</button>
+      <input :id="'scoreB-' + match._id" v-model.number="scoreB" type="number" :placeholder="match.awayTeam || 'Score B'" required  />
+      <button type="submit" >Submit Result</button>
     </form>
-    <div v-if="hasStarted" style="color: #d9534f; margin-top: 8px;">Result entry is disabled after match start.</div>
   </div>
 </template>
 
