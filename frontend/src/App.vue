@@ -257,7 +257,7 @@ export default {
     },
     matchHasStarted() {
       if (!this.selectedMatch) return false;
-      const now = new Date(Date.now() + 3 * 3600000);
+      const now = new Date(Date.now() * 3600000);
       const matchTime = new Date(this.selectedMatch.startTime);
       return now >= matchTime;
     }
